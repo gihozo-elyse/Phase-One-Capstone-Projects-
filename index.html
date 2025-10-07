@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Odyssey - Discover Your Next Read</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+    </style>
+    
+    
+        
+</head>
+<body class="bg-gray-900">
+   
+    <button id="mobileMenuButton" class="lg:hidden fixed top-4 left-4 z-50 bg-zinc-900 text-white p-3 rounded-lg">Menu</button>
+
+    
+
+    
+    <nav id="sidebar" class="mobile-menu lg:translate-x-0 w-64 bg-zinc-900 shadow-lg fixed left-0 top-0 h-full flex flex-col p-4 z-50">
+       
+        <button id="closeMenu" class="lg:hidden self-end text-white mb-4">Close</button>
+
+        <h2 class="text-xl font-semibold mb-6 text-white italic">Book Odyssey</h2>
+        <ul class="flex flex-col gap-4">
+            <li>
+                <a href="index.html" class="block px-4 py-2 rounded hover:text-yellow-400 text-white transition-colors">Home</a>
+            </li>
+            <li>
+                <a href="favorites.html" class="block px-4 py-2 rounded hover:text-yellow-400 text-white transition-colors">Favorites</a>
+            </li>
+            <li>
+                <a href="about.html" class="block px-4 py-2 rounded hover:text-yellow-400 text-white transition-colors">About</a>
+            </li>
+            
+        </ul>
+        
+        
+        <div class="mt-auto pt-6 border-t border-gray-700">
+            <p class="text-gray-400 text-sm text-center">
+                &copy; 2025 Book Odyssey<br>
+                Built with ❤️ using Open Library API
+            </p>
+        </div>
+    </nav>
+
+    
+    <main class="lg:ml-64 min-h-screen">
+        
+        <header class="w-full bg-gradient-to-r from-black via-gray-900 to-yellow-600 text-white justify-center items-center py-12 lg:py-16 px-4">
+            <div class="w-full  text-center">
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-yellow-400">
+                    Your Next Favorite Story Starts Here
+                </h1>
+                <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-gray-200">
+                   Through reading comes knowledge, through knowledge comes journey - guided by the most loyal friend called: a book.
+                
+                </p>
+
+                
+                <div class="max-w-2xl mx-auto flex flex-col sm:flex-row gap-2">
+                    <input 
+                        type="text" 
+                        id="searchInput"
+                        placeholder="Search for books by title, author, or subject..."
+                        class="flex-grow px-4 py-3 rounded-lg sm:rounded-l-lg sm:rounded-r-none text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    >
+                    <button 
+                        id="searchButton"
+                        class="bg-yellow-600 hover:bg-yellow-700 px-6 py-3 rounded-lg sm:rounded-r-lg sm:rounded-l-none font-medium text-black transition-colors whitespace-nowrap"
+                    >
+                        Search
+                    </button>
+                </div>
+            </div>
+        </header>
+
+       
+        <div class="container mx-auto px-4 sm:px-6 py-6 lg:py-8">
+            
+            <h2 id="sectionTitle" class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">Popular Books</h2>
+          
+            <div id="loadingSpinner" class="hidden flex justify-center items-center py-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600"></div>
+                <span class="ml-3 text-gray-600">Loading books...</span>
+            </div>
+
+           
+            <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                Error message will appear here
+            </div>
+
+            
+            <div id="emptyState" class="hidden text-center py-12">
+                <h2 class="text-2xl font-semibold text-gray-600 mb-2">No books found</h2>
+                <p class="text-gray-500">Try searching for a different title or browse popular books.</p>
+            </div>
+
+           
+            <div id="booksGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+                
+            </div>
+        </div>
+    </main>
+
+    <script src="feachbooks.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/favorites.js"></script>
+</body>
+</html>
