@@ -160,7 +160,7 @@ function addToFavorites(buttonElement) {
     
     const oldText = buttonElement.textContent;
     buttonElement.textContent = 'Added!';
-    buttonElement.style.backgroundColor = '#16a34a';
+    buttonElement.classList.add('bg-green-400');
     
     setTimeout(() => {
         buttonElement.textContent = oldText;
