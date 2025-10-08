@@ -54,8 +54,8 @@ function makeFavoriteCard(book) {
             <p class="text-gray-600 text-xs mb-1 line-clamp-1">${book.author}</p>
             <p class="text-gray-500 text-xs mb-2">Added: ${addedDate}</p>
             <div class="flex flex-col gap-1">
-                <button onclick="readBook('${book.key}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors">Read Book</button>
-                <button onclick="removeFromFavorites('${book.key}')" class="w-full bg-red-600 hover:bg-red-700 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors">Remove</button>
+                <button onclick="readBook('${book.key}')" class="w-full bg-gray-700 hover:bg-gray-900 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors">Read Book</button>
+                <button onclick="removeFromFavorites('${book.key}')" class="w-full bg-yellow-600 hover:bg-yellow-700 text-black px-2 py-1.5 rounded text-xs font-medium transition-colors">Remove</button>
             </div>
         </div>
     </div>`;
