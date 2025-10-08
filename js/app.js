@@ -1,11 +1,8 @@
-// Simple book search app
-
-// When page loads
 document.addEventListener('DOMContentLoaded', () => {
     setupMenu();
     setupSearch();
 });
-// Menu stuff
+
 function setupMenu() {
     const menuButton = document.getElementById('mobileMenuButton');
     const closeButton = document.getElementById('closeMenu');
@@ -24,7 +21,6 @@ function setupMenu() {
     }
 }
 
-// Search stuff
 function setupSearch() {
     const searchButton = document.getElementById('searchButton');
     const searchInput = document.getElementById('searchInput');
@@ -41,11 +37,9 @@ function setupSearch() {
         };
     }
     
-    // Load some popular books when page loads
     loadPopularBooks();
 }
 
-// Load popular books
 async function loadPopularBooks() {
     try {
         const books = await window.getPopularBooks(12);
@@ -55,7 +49,6 @@ async function loadPopularBooks() {
     }
 }
 
-// Search for books
 async function performSearch() {
     const searchInput = document.getElementById('searchInput');
     const query = searchInput.value.trim();
@@ -77,7 +70,6 @@ async function performSearch() {
     }
 }
 
-// Show books on page
 function showBooks(books) {
     const booksGrid = document.getElementById('booksGrid');
     
@@ -93,7 +85,6 @@ function showBooks(books) {
     console.log('Books displayed:', books.length);
 }
 
-// Make one book card
 function makeBookCard(book) {
     const coverId = book.coverId;
     let coverUrl = 'https://via.placeholder.com/150x200?text=No+Cover';
@@ -107,27 +98,46 @@ function makeBookCard(book) {
     const year = book.year || 'Unknown Year';
     const key = book.id;
     
+    const escapeHtml = (str) => {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    };
+    
+    const escapedTitle = escapeHtml(title);
+    const escapedAuthor = escapeHtml(author);
+    
     return `<div class="bg-white rounded-lg  overflow-hidden hover:shadow-xl transition-all duration-300">
         <div class="aspect-[2/3] overflow-hidden">
-            <img src="${coverUrl}" alt="${title}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+            <img src="${coverUrl}" alt="${escapedTitle}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
         </div>
         <div class="p-2">
-            <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-2" title="${title}">${title}</h3>
-            <p class="text-gray-600 text-xs mb-1 line-clamp-1">${author}</p>
+            <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-2" title="${escapedTitle}">${escapedTitle}</h3>
+            <p class="text-gray-600 text-xs mb-1 line-clamp-1">${escapedAuthor}</p>
             <p class="text-gray-500 text-xs mb-2">${year}</p>
             <div class="flex flex-col gap-1">
                 <button onclick="readBook('${key}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors">Read Book</button>
-                <button onclick="addToFavorites('${key}', '${title}', '${author}', '${coverUrl}')" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors">Add to Favorites</button>
+                <button 
+                    class="favorite-btn w-full bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors"
+                    data-key="${key}"
+                    data-title="${escapedTitle}"
+                    data-author="${escapedAuthor}"
+                    data-cover="${coverUrl}"
+                    onclick="addToFavorites(this)"
+                >Add to Favorites</button>
             </div>
         </div>
     </div>`;
 }
 
-// Add book to favorites
-function addToFavorites(key, title, author, coverUrl) {
+function addToFavorites(buttonElement) {
+    const key = buttonElement.dataset.key;
+    const title = buttonElement.dataset.title;
+    const author = buttonElement.dataset.author;
+    const coverUrl = buttonElement.dataset.cover;
+    
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     
-    // Check if already there
     const alreadyExists = favorites.some(fav => fav.key === key);
     if (alreadyExists) {
         alert('Already in favorites!');
@@ -145,19 +155,19 @@ function addToFavorites(key, title, author, coverUrl) {
     favorites.push(book);
     localStorage.setItem('favorites', JSON.stringify(favorites));
     
-    // Show success
-    const button = event.target;
-    const oldText = button.textContent;
-    button.textContent = 'Added!';
-    button.style.backgroundColor = '#16a34a';
+    console.log('Book added to favorites:', book);
+    console.log('Total favorites:', favorites.length);
+    
+    const oldText = buttonElement.textContent;
+    buttonElement.textContent = 'Added!';
+    buttonElement.style.backgroundColor = '#16a34a';
     
     setTimeout(() => {
-        button.textContent = oldText;
-        button.style.backgroundColor = '';
+        buttonElement.textContent = oldText;
+        buttonElement.style.backgroundColor = '';
     }, 2000);
 }
 
-// Show/hide loading
 function showLoading() {
     const spinner = document.getElementById('loadingSpinner');
     const grid = document.getElementById('booksGrid');
@@ -171,7 +181,6 @@ function hideLoading() {
     if (spinner) spinner.classList.add('hidden');
 }
 
-// Show/hide error
 function showError(message) {
     const error = document.getElementById('errorMessage');
     if (error) {
@@ -185,7 +194,6 @@ function hideError() {
     if (error) error.classList.add('hidden');
 }
 
-// Show/hide empty state
 function showEmpty() {
     const empty = document.getElementById('emptyState');
     if (empty) empty.classList.remove('hidden');
@@ -196,23 +204,18 @@ function hideEmpty() {
     if (empty) empty.classList.add('hidden');
 }
 
-// Read book functionality
 async function readBook(bookKey) {
     try {
-        // Show loading state
         const loadingModal = createLoadingModal();
         document.body.appendChild(loadingModal);
         
-        // Fetch book details from Open Library
         const response = await fetch(`https://openlibrary.org${bookKey}.json`);
         if (!response.ok) throw new Error('Could not load book');
         
         const bookData = await response.json();
         
-        // Remove loading modal
         loadingModal.remove();
         
-        // Create and show reader modal
         const readerModal = createReaderModal(bookData);
         document.body.appendChild(readerModal);
         
@@ -222,7 +225,6 @@ async function readBook(bookKey) {
     }
 }
 
-// Create loading modal
 function createLoadingModal() {
     const modal = document.createElement('div');
     modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
@@ -235,7 +237,6 @@ function createLoadingModal() {
     return modal;
 }
 
-// Create reader modal
 function createReaderModal(bookData) {
     const modal = document.createElement('div');
     modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4';
@@ -289,7 +290,6 @@ function createReaderModal(bookData) {
     return modal;
 }
 
-// Close reader modal
 function closeReader() {
     const modal = document.getElementById('readerModal');
     if (modal) modal.remove();
