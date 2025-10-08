@@ -107,7 +107,7 @@ function makeBookCard(book) {
     const year = book.year || 'Unknown Year';
     const key = book.id;
     
-    return `<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300">
+    return `<div class="bg-white rounded-lg  overflow-hidden hover:shadow-xl transition-all duration-300">
         <div class="aspect-[2/3] overflow-hidden">
             <img src="${coverUrl}" alt="${title}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
         </div>
