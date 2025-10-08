@@ -87,10 +87,10 @@ function showBooks(books) {
 
 function makeBookCard(book) {
     const coverId = book.coverId;
-    let coverUrl = 'https://via.placeholder.com/150x200?text=No+Cover';
+    let coverUrl = 'https://via.placeholder.com/300x450?text=No+Cover';
     
     if (coverId) {
-        coverUrl = `https://covers.openlibrary.org/b/id/${coverId}-S.jpg`;
+        coverUrl = `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`;
     }
     
     const title = book.title || 'No Title';
@@ -107,9 +107,9 @@ function makeBookCard(book) {
     const escapedTitle = escapeHtml(title);
     const escapedAuthor = escapeHtml(author);
     
-    return `<div class="bg-white rounded-lg  overflow-hidden hover:shadow-xl transition-all duration-300">
-        <div class="aspect-[2/3] overflow-hidden">
-            <img src="${coverUrl}" alt="${escapedTitle}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+    return `<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300">
+        <div class="aspect-[2/3] overflow-hidden bg-gray-100">
+            <img src="${coverUrl}" alt="${escapedTitle}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" loading="lazy">
         </div>
         <div class="p-2">
             <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-2" title="${escapedTitle}">${escapedTitle}</h3>
